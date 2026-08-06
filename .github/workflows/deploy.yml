@@ -11,9 +11,11 @@ permissions:
   pages: write
   id-token: write
 
+# One deployment at a time, but never cancel one that is already publishing —
+# interrupting a Pages deployment can leave it stuck in "waiting".
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:

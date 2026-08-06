@@ -24,7 +24,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -33,11 +33,10 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Pages must already be set to build from GitHub Actions in repo
+      # settings; the workflow token cannot create the site itself.
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          # Turns Pages on for the repo if it has not been enabled yet.
-          enablement: true
 
       - name: Upload build output
         uses: actions/upload-pages-artifact@v3

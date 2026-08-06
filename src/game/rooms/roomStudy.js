@@ -42,14 +42,17 @@ export function buildRoomStudy({ ui, inventory }) {
   // painting on the east wall (interactable clue)
   const paintingMat = new THREE.MeshStandardMaterial({ color: 0x1c1a17 })
   const painting = new THREE.Mesh(new THREE.BoxGeometry(0.06, 1.2, 0.9), paintingMat)
-  painting.position.set(3.9, 1.9, -2)
+  // Wall inner faces sit at ±3.85, so anything mounted has to clear that.
+  painting.position.set(3.81, 1.9, -2)
   group.add(painting)
 
   // wall clock on the west wall (interactable clue)
   const clockMat = new THREE.MeshStandardMaterial({ map: clockTexture(1) })
-  const clock = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 0.08, 32), clockMat)
-  clock.rotation.z = Math.PI / 2
-  clock.position.set(-3.92, 2.0, 1.6)
+  // A flat disc rather than a cylinder cap — the cap showed its mirrored back
+  // face, which flipped the hour hand to the wrong side of the dial.
+  const clock = new THREE.Mesh(new THREE.CircleGeometry(0.45, 48), clockMat)
+  clock.rotation.y = Math.PI / 2
+  clock.position.set(-3.82, 2.0, 1.6)
   group.add(clock)
 
   // keypad panel mounted beside the north doorway
@@ -57,7 +60,7 @@ export function buildRoomStudy({ ui, inventory }) {
     new THREE.BoxGeometry(0.4, 0.4, 0.08),
     new THREE.MeshStandardMaterial({ color: 0x2b2b2b, emissive: 0x113322, emissiveIntensity: 0.5 })
   )
-  keypadPanel.position.set(1.6, 1.3, -3.85)
+  keypadPanel.position.set(1.6, 1.3, -3.80)
   group.add(keypadPanel)
 
   const door = createDoor({ gapX: DOOR_GAP, zPos: -3.85 })

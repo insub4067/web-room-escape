@@ -20,7 +20,8 @@ export function buildRoomVault({ ui, inventory }) {
   // vault wheel mechanism mounted in the doorway
   const wheelMat = new THREE.MeshStandardMaterial({ color: 0x8a7a4a, metalness: 0.6, roughness: 0.4 })
   const wheelGroup = new THREE.Group()
-  wheelGroup.position.set(0, 1.4, -3.9)
+  // In front of the door slab (which spans z -3.89..-3.81) so it stays visible.
+  wheelGroup.position.set(0, 1.4, -3.72)
   const rim = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.08, 12, 24), wheelMat)
   wheelGroup.add(rim)
   for (let i = 0; i < 4; i++) {
@@ -28,13 +29,22 @@ export function buildRoomVault({ ui, inventory }) {
     spoke.rotation.z = (Math.PI / 4) * i
     wheelGroup.add(spoke)
   }
+  // The rim is a thin ring, so a crosshair aimed at the middle of the wheel
+  // shoots straight through the hole. This invisible disc gives the whole
+  // wheel a solid surface to hit.
+  const wheelTarget = new THREE.Mesh(
+    new THREE.CircleGeometry(0.68, 24),
+    new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })
+  )
+  wheelTarget.position.z = 0.12
+  wheelGroup.add(wheelTarget)
   group.add(wheelGroup)
 
   const door = createDoor({ gapX: DOOR_GAP, zPos: -3.85, color: 0x3a352c })
   group.add(door.group)
 
   interactables.push({
-    mesh: rim,
+    mesh: wheelTarget,
     radius: 2.8,
     getPrompt: () => (state.doorUnlocked ? null : '금고 손잡이를 돌린다'),
     interact: () => {

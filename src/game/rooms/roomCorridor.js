@@ -59,7 +59,7 @@ export function buildRoomCorridor({ ui, inventory }) {
     new THREE.PlaneGeometry(1.6, 1.0),
     new THREE.MeshStandardMaterial({ map: muralTexture([GEMS[1].color, GEMS[0].color, GEMS[2].color]) })
   )
-  mural.position.set(3.84, 1.7, 0)
+  mural.position.set(3.82, 1.7, 0)
   mural.rotation.y = -Math.PI / 2
   group.add(mural)
   interactables.push({
